@@ -41,7 +41,7 @@ function App() {
 			<table className='users-list'>
 				<tbody>
 					<tr>
-						<th><ButtonTable sortField='id' reverse='true' sorting={(e)=>sort(e)}>#</ButtonTable></th>
+						<th><ButtonTable sortField='id' reverse='false' sorting={(e)=>sort(e)}>#</ButtonTable></th>
 						<th>Avatar</th>
 						<th><ButtonTable sortField='name' reverse='false' sorting={(e)=>sort(e)}>Name</ButtonTable></th>
 						<th>Username</th>

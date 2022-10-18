@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 
 
 export default observer(Row);
-function Row({ id, name, num, username, email, phone, address }) {
+function Row({ id, name, num, username, email, phone, zipcode }) {
 	// console.log('---',name);
 	return (
 		<tr key={id}>
@@ -13,7 +13,7 @@ function Row({ id, name, num, username, email, phone, address }) {
 			<td>{username}</td>
 			<td>{email}</td>
 			<td>{phone}</td>
-			<td>{address.zipcode}</td>
+			<td>{zipcode}</td>
 		</tr>
 	)
 }

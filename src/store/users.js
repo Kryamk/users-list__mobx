@@ -1,30 +1,44 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
 export default class Users {
+	usersInitial = [];
 	users = [];
 
-	item(id) {
-		// console.log('item');
-		return this.users.find(pr => pr.id == id);
-	}
+	// item(id) {
+	// 	// console.log('item');
+	// 	return this.users.find(pr => pr.id == id);
+	// }
 
 	async load() {
-		let users = await this.api.load();
+		let usersInitial = await this.api.load();
 		runInAction(() => {
-			this.users = users;
+			this.usersInitial = usersInitial;
+			this.createUsersList(usersInitial)
 		})
 	}
 
-	sorted = (field, reverse) =>{
+	createUsersList = (list) => {
+		let users = [];
+		list.forEach(user => {
+			users.push({
+				'id': user.id,
+				'name': user.name,
+				'username': user.username,
+				'email': user.email,
+				'phone': user.phone,
+				'zipcode': user.address.zipcode,
+			})
+		})
+		this.users = users;
+	}
+
+	sorted = (field, reverse) => {
 		let sortedUsers = this.users.slice();
-		if (field === 'name' ) {
+		if (field === 'id') {
+			sortedUsers = sortedUsers.sort((a, b) => a[field] - b[field])
+		}
+		else {
 			sortedUsers = sortedUsers.sort((a, b) => a[field].localeCompare(b[field]))
-		}
-		else if (field === 'id' ) {
-			sortedUsers = sortedUsers.sort((a,b)=> a[field] - b[field])
-		}
-		else if (field === 'zipcode' ) {
-			sortedUsers = sortedUsers.sort((a, b) => a.address[field].localeCompare(b.address[field]))
 		}
 
 		if (reverse === 'true') {
