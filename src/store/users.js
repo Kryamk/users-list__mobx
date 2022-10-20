@@ -3,6 +3,8 @@ import { makeAutoObservable, runInAction } from "mobx";
 export default class Users {
 	usersInitial = [];
 	users = [];
+	usersNum = 0;
+	// chekedUsers = [];
 
 	// item(id) {
 	// 	// console.log('item');
@@ -13,7 +15,8 @@ export default class Users {
 		let usersInitial = await this.api.load();
 		runInAction(() => {
 			this.usersInitial = usersInitial;
-			this.createUsersList(usersInitial)
+			this.createUsersList(usersInitial);
+			this.usersNum = usersInitial.length;
 		})
 	}
 
@@ -47,6 +50,32 @@ export default class Users {
 
 		return sortedUsers;
 	}
+
+	/* sorted = (field, reverse) => {
+		if (field === 'id') {
+			this.users.sort((a, b) => a[field] - b[field])
+		}
+		else {
+			this.users.sort((a, b) => a[field].localeCompare(b[field]))
+		}
+
+		if (reverse === 'true') {
+			this.users.reverse();
+		}
+
+		return this.users;
+	} */
+
+	add = (user) => {
+		user = { id: this.usersNum + 1, ...user }
+		this.users.push(user);
+		++this.usersNum;
+	}
+
+	remove = (usersId) => {
+		this.users = this.users.filter(user => !usersId.includes(user.id))
+	}
+
 
 	constructor(rootStore) {
 		makeAutoObservable(this)

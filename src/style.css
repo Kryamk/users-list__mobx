@@ -57,3 +57,10 @@ li a.active {
 	color: white;
 	border-radius: 50%;
 }
+
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 40px;
+}
