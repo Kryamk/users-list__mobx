@@ -88,6 +88,16 @@ export default class Users {
 		})
 	}
 
+	/* getChecked = ()=>{
+		let checkedUsers = [];
+		this.users.forEach(user=>{
+			if (user.checked === true) {
+				checkedUsers.push(user)
+			}
+		})
+		return checkedUsers;
+	} */
+
 
 	constructor(rootStore) {
 		makeAutoObservable(this)
