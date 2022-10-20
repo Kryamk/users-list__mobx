@@ -36,7 +36,7 @@ export default class Users {
 		this.users = users;
 	}
 
-	sorted = (field, reverse) => {
+	/* sorted = (field, reverse) => {
 		let sortedUsers = this.users.slice();
 		if (field === 'id') {
 			sortedUsers = sortedUsers.sort((a, b) => a[field] - b[field])
@@ -50,9 +50,9 @@ export default class Users {
 		}
 
 		return sortedUsers;
-	}
+	} */
 
-	/* sorted = (field, reverse) => {
+	sorted = (field, reverse) => {
 		if (field === 'id') {
 			this.users.sort((a, b) => a[field] - b[field])
 		}
@@ -63,9 +63,7 @@ export default class Users {
 		if (reverse === 'true') {
 			this.users.reverse();
 		}
-
-		return this.users;
-	} */
+	}
 
 	add = (user) => {
 		user = { id: this.usersNum + 1, ...user }
@@ -82,10 +80,16 @@ export default class Users {
 		this.users = this.users.map(user => user.id === id ? {...user, checked}  : user)
 	}
 
-	changeCheckedAll = (check) => {
+	changeCheckedAll = (checked) => {
 		this.users.forEach(user => {
-			user.checked = check
+			user.checked = checked
 		})
+	}
+
+	getCountChecked = ()=>{
+		let count = 0;
+		this.users.forEach(item => item.checked === true ? ++count : null)
+		return count;
 	}
 
 	/* getChecked = ()=>{

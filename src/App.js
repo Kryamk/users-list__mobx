@@ -17,7 +17,7 @@ function App() {
 	console.log('render App');
 
 	const [usersStore] = useStore('users');
-	let { users, sorted, add, remove, changeChecked, changeCheckedAll } = usersStore;
+	let { users, sorted, add, remove, changeChecked, changeCheckedAll, getCountChecked } = usersStore;
 
 
 	const [show, setShow] = useState(false)
@@ -28,11 +28,11 @@ function App() {
 	const handleShow2 = () => { setShow2(true) }
 	const handleClose2 = () => { setShow2(false) }
 
-
-	const [list, setList] = useState([])
+	const [countChecked, setCountChecked] = useState(0)
 	useEffect(() => {
-		setList(users)
+		setCountChecked(getCountChecked())
 	}, [users])
+
 	const sort = (e) => {
 		let field = e.target.dataset.sort
 		let reverse = e.target.dataset.reverse
@@ -42,23 +42,23 @@ function App() {
 		else {
 			e.target.dataset.reverse = 'true'
 		}
-		let sortList = sorted(field, reverse)
-		setList(sortList)
+		sorted(field, reverse)
 	}
 
-	const [disabledbuttonDel, setDisabledbuttonDel] = useState(true)
-	const [countChecked, setCountChecked] = useState(0)
-	useEffect(()=>{
-		let count = 0;
-		users.forEach(item=> item.checked === true ? ++count : null)
-		if (count === 0) {
-			setDisabledbuttonDel(true)
-		}
-		else {
-			setDisabledbuttonDel(false)
-		}
-		setCountChecked(count)
-	}, [list])
+
+	// const [disabledbuttonDel, setDisabledbuttonDel] = useState(true)
+
+	// useEffect(() => {
+	// 	let count = 0;
+	// 	users.forEach(item => item.checked === true ? ++count : null)
+	// 	setCountChecked(count)
+	// }, [users])
+	// useEffect(() => {
+	// 	let count = 0;
+	// 	users.forEach(item => item.checked === true ? ++count : null)
+	// 	setCountChecked(count)
+	// }, [users])
+
 
 
 	const [checkInputAll, setcheckInputAll] = useState(false)
@@ -68,6 +68,7 @@ function App() {
 	const checkedUsersAll = (e) => {
 		changeCheckedAll(e.target.checked)
 		setcheckInputAll(e.target.checked)
+		setCountChecked(getCountChecked())
 	}
 
 
@@ -84,23 +85,24 @@ function App() {
 
 
 
-	useEffect(() => {
-		// console.log('---',list);
-		// let obj = list[0]
-		// if (obj) console.log('---list', obj.checked);
-	}, [list])
+	// useEffect(() => {
+	// 	// console.log('---',list);
+	// 	// let obj = list[0]
+	// 	// if (obj) console.log('---list', obj.checked);
+	// 	setCountChecked(getCountChecked())
+	// }, [users])
 
 	return (
 		<div className="wrapper">
 
-			<button type="button" onClick={handleShow2} disabled={disabledbuttonDel}>Delete</button>
+
 
 
 			<header className="header">
 				<div className="filter">filter</div>
+				<Button variant="danger" disabled={countChecked === 0 ? true : false} type="button" onClick={handleShow2}>Delete</Button>
 				<Button variant="primary" onClick={handleShow}>+ Add user</Button>
 			</header>
-
 
 			<table className='users-list'>
 				<tbody>
@@ -115,7 +117,7 @@ function App() {
 						<th><ButtonTable sortField='zipcode' reverse='false' sorting={(e) => sort(e)}>zipcode</ButtonTable></th>
 					</tr>
 
-					{list.map((item, i = 0) => (
+					{users.map((item, i = 0) => (
 						<Row key={item.id} {...item} handleCheck={handleCheck} />
 					))}
 
@@ -137,13 +139,13 @@ function App() {
 					<Modal.Title >Deleted users</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					Are you sure you want to delete {countChecked} the selected users?
+					Are you sure you want to delete the selected {countChecked} users?
 				</Modal.Body>
 				<Modal.Footer>
-					<button type="button" onClick={removeUsers}>Delete</button>
-					<button type="button" onClick={handleClose2}>Cancel</button>
-			</Modal.Footer>
-		</Modal>
+					<Button variant='success' type="button" onClick={removeUsers}>Delete</Button>
+					<Button variant='secondary' type="button" onClick={handleClose2}>Cancel</Button>
+				</Modal.Footer>
+			</Modal>
 		</div >
 	);
 }
