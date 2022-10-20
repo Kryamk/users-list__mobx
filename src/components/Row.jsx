@@ -10,7 +10,7 @@ function Row({ handleCheck, id, name, username, email, phone, zipcode, checked }
 
 
 	return (
-		<tr key={id}>
+		<tr key={id} style={checked ? {background: 'lightskyblue'} : {}}>
 			<td><input type="checkbox" checked={checked} value={id} onChange={handleCheck}></input></td>
 			<td>{id}</td>
 			<td><span className='users-list__avatar'>{name[0]}</span></td>

@@ -16,7 +16,6 @@ export default observer(App);
 function App() {
 	console.log('render App');
 
-
 	const [show, setShow] = useState(false)
 	const handleShow = () => { setShow(true) }
 	const handleClose = () => { setShow(false) }
@@ -24,6 +23,7 @@ function App() {
 
 	const [usersStore] = useStore('users');
 	let { users, sorted, add, remove, changeChecked, changeCheckedAll } = usersStore;
+
 
 	const [list, setList] = useState([])
 	useEffect(() => {
@@ -43,35 +43,35 @@ function App() {
 		setList(sortList)
 	}
 
+
 	const addUser = (user) => {
 		add(user)
 		setShow(false)
 	}
 
-	// const [checkedUsers, setCheckedUsers] = useState([])
+	const [checkInputAll, setcheckInputAll] = useState(false)
 	const handleCheck = (e) => {
 		changeChecked(+e.target.value, e.target.checked)
+
 	}
-	const removeUsers = () => remove();
-
-
-
-
-
 	const checkedUsersAll = (e) => {
 		changeCheckedAll(e.target.checked)
+		setcheckInputAll(e.target.checked)
 	}
+	const removeUsers = () => {
+		remove()
+		setcheckInputAll(false)
+	};
 
 
 
 
 
-
-	// useEffect(() => {
-	// 	let obj = list[0]
-	// 	console.log('---',list);
-	// 	// if (obj) console.log('---list', obj.checked);
-	// }, [list])
+	useEffect(() => {
+		// console.log('---',list);
+		// let obj = list[0]
+		// if (obj) console.log('---list', obj.checked);
+	}, [list])
 
 	return (
 		<div className="wrapper">
@@ -99,7 +99,7 @@ function App() {
 			<table className='users-list'>
 				<tbody>
 					<tr>
-						<th><input type="checkbox" onChange={(e) => checkedUsersAll(e)}></input> All</th>
+						<th><input checked={checkInputAll} type="checkbox" onChange={(e) => checkedUsersAll(e)}></input> All</th>
 						<th><ButtonTable sortField='id' reverse='false' sorting={(e) => sort(e)}>#</ButtonTable></th>
 						<th>Avatar</th>
 						<th><ButtonTable sortField='name' reverse='false' sorting={(e) => sort(e)}>Name</ButtonTable></th>
