@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Form } from 'react-bootstrap';
 
 export default function FormAdd({ add }) {
-	let emptyUser = { 'name': '', 'username': '', 'email': '', 'phone': '', 'zipcode': '', }
+	let emptyUser = { 'name': '', 'username': '', 'email': '', 'phone': '', 'zipcode': '', 'checked': false }
 	const [user, setUser] = useState(emptyUser)
 
 	const addNewUser = (e) => {

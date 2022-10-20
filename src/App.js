@@ -23,7 +23,7 @@ function App() {
 
 
 	const [usersStore] = useStore('users');
-	let { users, sorted, add, remove } = usersStore;
+	let { users, sorted, add, remove, changeChecked, changeCheckedAll } = usersStore;
 
 	const [list, setList] = useState([])
 	useEffect(() => {
@@ -48,73 +48,35 @@ function App() {
 		setShow(false)
 	}
 
-	const [checkedUsers, setCheckedUsers] = useState([])
+	// const [checkedUsers, setCheckedUsers] = useState([])
 	const handleCheck = (e) => {
-		let id = +e.target.value;
-		if (e.target.checked) {
-			setCheckedUsers([...checkedUsers, id])
-		}
-		else {
-			setCheckedUsers(checkedUsers.filter(el => el != id))
-		}
+		changeChecked(+e.target.value, e.target.checked)
 	}
+	const removeUsers = () => remove();
 
-
-	const inputs = useRef([])
-
-	useEffect(() => {
-		console.log('---inputs', inputs);
-	}, [list])
 
 
 
 
 	const checkedUsersAll = (e) => {
-		// let allUsersId;
-		// if (e.target.checked) {
-		// 	allUsersId = list.map(item => item.id)
-		// 	setCheckedUsers(allUsersId)
-		// }
-		// else {
-		// 	setCheckedUsers([])
-		// }
-		let allChecked = []
-		inputs.current.forEach(input => {
-			allChecked.push(input.checked)
-		})
-		console.log('---------',inputs);
-		if (allChecked.includes(false)) {
-			inputs.current.forEach(input => {
-				input.checked = true
-				setCheckedUsers([...checkedUsers, +input.value])
-			})
-		}
-		else {
-			inputs.current.forEach(input => {
-				input.checked = false
-			})
-			setCheckedUsers([])
-		}
+		changeCheckedAll(e.target.checked)
 	}
 
-	// const changeCheked = (e) = {
-	// 	e.target.checked = !e.target.checked;
-	// }
 
 
 
 
 
-
-
-	useEffect(() => {
-		console.log('---checkedUsers', checkedUsers);
-	}, [checkedUsers])
+	// useEffect(() => {
+	// 	let obj = list[0]
+	// 	console.log('---',list);
+	// 	// if (obj) console.log('---list', obj.checked);
+	// }, [list])
 
 	return (
 		<div className="wrapper">
 
-			<button type="button" onClick={() => remove(checkedUsers)}>Delete</button>
+			<button type="button" onClick={removeUsers}>Delete</button>
 
 			<header className="header">
 				<div className="filter">filter</div>
@@ -148,7 +110,7 @@ function App() {
 					</tr>
 
 					{list.map((item, i = 0) => (
-						<Row onRef={el => inputs.current[i] = el} key={item.id} {...item} handleCheck={handleCheck} />
+						<Row key={item.id} {...item} handleCheck={handleCheck} />
 					))}
 
 				</tbody>

@@ -30,6 +30,7 @@ export default class Users {
 				'email': user.email,
 				'phone': user.phone,
 				'zipcode': user.address.zipcode,
+				'checked': false,
 			})
 		})
 		this.users = users;
@@ -72,8 +73,19 @@ export default class Users {
 		++this.usersNum;
 	}
 
-	remove = (usersId) => {
-		this.users = this.users.filter(user => !usersId.includes(user.id))
+	remove = () => {
+		// this.users = this.users.filter(user => !usersId.includes(user.id))
+		this.users = this.users.filter(user => user.checked !== true)
+	}
+
+	changeChecked = (id, checked) => {
+		this.users = this.users.map(user => user.id === id ? {...user, checked}  : user)
+	}
+
+	changeCheckedAll = (check) => {
+		this.users.forEach(user => {
+			user.checked = check
+		})
 	}
 
 

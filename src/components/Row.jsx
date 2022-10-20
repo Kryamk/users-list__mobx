@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 
 
 export default observer(Row);
-function Row({ handleCheck, id, name, username, email, phone, zipcode, onRef }) {
+function Row({ handleCheck, id, name, username, email, phone, zipcode, checked }) {
 	// console.log('render Row');
 
 
@@ -11,7 +11,7 @@ function Row({ handleCheck, id, name, username, email, phone, zipcode, onRef }) 
 
 	return (
 		<tr key={id}>
-			<td><input ref={onRef} type="checkbox" value={id} onChange={handleCheck}></input></td>
+			<td><input type="checkbox" checked={checked} value={id} onChange={handleCheck}></input></td>
 			<td>{id}</td>
 			<td><span className='users-list__avatar'>{name[0]}</span></td>
 			<td>{name}</td>
