@@ -36,34 +36,6 @@ export default class Users {
 		this.users = users;
 	}
 
-	/* sorted = (field, reverse) => {
-		let sortedUsers = this.users.slice();
-		if (field === 'id') {
-			sortedUsers = sortedUsers.sort((a, b) => a[field] - b[field])
-		}
-		else {
-			sortedUsers = sortedUsers.sort((a, b) => a[field].localeCompare(b[field]))
-		}
-
-		if (reverse === 'true') {
-			sortedUsers.reverse();
-		}
-
-		return sortedUsers;
-	} */
-
-	sorted = (field, reverse) => {
-		if (field === 'id') {
-			this.users.sort((a, b) => a[field] - b[field])
-		}
-		else {
-			this.users.sort((a, b) => a[field].localeCompare(b[field]))
-		}
-
-		if (reverse === 'true') {
-			this.users.reverse();
-		}
-	}
 
 	add = (user) => {
 		user = { id: this.usersNum + 1, ...user }
@@ -77,7 +49,7 @@ export default class Users {
 	}
 
 	changeChecked = (id, checked) => {
-		this.users = this.users.map(user => user.id === id ? {...user, checked}  : user)
+		this.users = this.users.map(user => user.id === id ? { ...user, checked } : user)
 	}
 
 	changeCheckedAll = (checked) => {
@@ -86,7 +58,7 @@ export default class Users {
 		})
 	}
 
-	getCountChecked = ()=>{
+	getCountChecked = () => {
 		let count = 0;
 		this.users.forEach(item => item.checked === true ? ++count : null)
 		return count;
@@ -102,6 +74,54 @@ export default class Users {
 		return checkedUsers;
 	} */
 
+	sorted = (field, reverse) => {
+		// После фильтрации не работает сортировка, исправлено присваиванием нового массива в this.users
+		if (field === 'id') {
+			// this.users.sort((a, b) => a[field] - b[field])
+
+			let newArr = [...this.users]
+			newArr.sort((a, b) => a[field] - b[field])
+			this.users = newArr;
+
+		}
+		else {
+			// this.users.sort((a, b) => a[field].localeCompare(b[field]))
+
+			let newArr = [...this.users]
+			newArr.sort((a, b) => a[field].localeCompare(b[field]))
+			this.users = newArr;
+		}
+
+		if (reverse === 'true') {
+			// this.users.reverse();
+
+			let newArr = [...this.users]
+			newArr.reverse();
+			this.users = newArr;
+		}
+	}
+
+	search = (filter) => {
+		console.log('---', filter);
+		let query = filter.query;
+		let field = filter.field;
+		let filterUsers
+		if (field === 'all') {
+			filterUsers = this.users.filter(user => (
+				user['name'].toLowerCase().includes(query.toLowerCase()) ||
+				user['username'].toLowerCase().includes(query.toLowerCase()) ||
+				user['email'].toLowerCase().includes(query.toLowerCase()) ||
+				user['phone'].toLowerCase().includes(query.toLowerCase()) ||
+				user['zipcode'].toLowerCase().includes(query.toLowerCase())
+			))
+		}
+		else {
+			filterUsers = this.users.filter(user => user[field].toLowerCase().includes(query.toLowerCase()))
+		}
+
+		return filterUsers;
+
+	}
 
 	constructor(rootStore) {
 		makeAutoObservable(this)

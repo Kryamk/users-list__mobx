@@ -9,6 +9,7 @@ import ButtonTable from './components/ButtonTable';
 import FormAdd from './components/FormAdd';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Select from './components/Select/Select';
 // import { Button, Modal } from 'react-bootstrap';
 
 
@@ -17,16 +18,16 @@ function App() {
 	console.log('render App');
 
 	const [usersStore] = useStore('users');
-	let { users, sorted, add, remove, changeChecked, changeCheckedAll, getCountChecked } = usersStore;
+	let { users, sorted, add, remove, changeChecked, changeCheckedAll, getCountChecked, search } = usersStore;
 
 
 	const [show, setShow] = useState(false)
-	const handleShow = () => { setShow(true) }
-	const handleClose = () => { setShow(false) }
+	const showModalAdd = () => { setShow(true) }
+	const closeModalAdd = () => { setShow(false) }
 
 	const [show2, setShow2] = useState(false)
-	const handleShow2 = () => { setShow2(true) }
-	const handleClose2 = () => { setShow2(false) }
+	const showModalConfirm = () => { setShow2(true) }
+	const closeModalConfirm = () => { setShow2(false) }
 
 	const [countChecked, setCountChecked] = useState(0)
 	useEffect(() => {
@@ -45,22 +46,6 @@ function App() {
 		sorted(field, reverse)
 	}
 
-
-	// const [disabledbuttonDel, setDisabledbuttonDel] = useState(true)
-
-	// useEffect(() => {
-	// 	let count = 0;
-	// 	users.forEach(item => item.checked === true ? ++count : null)
-	// 	setCountChecked(count)
-	// }, [users])
-	// useEffect(() => {
-	// 	let count = 0;
-	// 	users.forEach(item => item.checked === true ? ++count : null)
-	// 	setCountChecked(count)
-	// }, [users])
-
-
-
 	const [checkInputAll, setcheckInputAll] = useState(false)
 	const handleCheck = (e) => {
 		changeChecked(+e.target.value, e.target.checked)
@@ -74,13 +59,31 @@ function App() {
 
 	const addUser = (user) => {
 		add(user)
-		setShow(false)
+		closeModalAdd()
 	}
 	const removeUsers = () => {
 		remove()
 		setcheckInputAll(false)
-		handleClose2()
+		closeModalConfirm()
 	};
+
+
+	const [list, setList] = useState([])
+
+	useEffect(() => {
+		setList(users)
+	}, [users])
+
+
+
+	const [filter, setFilter] = useState({ field: 'all' })
+	const enterQuery = (e) => {
+		// setFilter({...filter, query: e.target.value})
+		// console.log('---',e.target.value);
+		let filterUsers = search({ ...filter, query: e.target.value })
+		setList(filterUsers)
+	}
+
 
 
 
@@ -89,7 +92,6 @@ function App() {
 	// 	// console.log('---',list);
 	// 	// let obj = list[0]
 	// 	// if (obj) console.log('---list', obj.checked);
-	// 	setCountChecked(getCountChecked())
 	// }, [users])
 
 	return (
@@ -99,10 +101,15 @@ function App() {
 
 
 			<header className="header">
-				<div className="filter">filter</div>
-				<Button variant="danger" disabled={countChecked === 0 ? true : false} type="button" onClick={handleShow2}>Delete</Button>
-				<Button variant="primary" onClick={handleShow}>+ Add user</Button>
+				<div className="filter">
+					<Select onChange={selectedSort => setFilter({ ...filter, field: selectedSort })} />
+					<input type="text" onChange={enterQuery} placeholder='Search' />
+				</div>
+				<Button variant="danger" disabled={countChecked === 0 ? true : false} type="button" onClick={showModalConfirm}>Delete</Button>
+				<Button variant="primary" onClick={showModalAdd}>+ Add user</Button>
 			</header>
+
+
 
 			<table className='users-list'>
 				<tbody>
@@ -117,7 +124,9 @@ function App() {
 						<th><ButtonTable sortField='zipcode' reverse='false' sorting={(e) => sort(e)}>zipcode</ButtonTable></th>
 					</tr>
 
-					{users.map((item, i = 0) => (
+
+
+					{list.map((item, i = 0) => (
 						<Row key={item.id} {...item} handleCheck={handleCheck} />
 					))}
 
@@ -125,7 +134,7 @@ function App() {
 			</table>
 
 
-			<Modal show={show} onHide={handleClose}>
+			<Modal show={show} onHide={closeModalAdd}>
 				<Modal.Header closeButton>
 					<Modal.Title >Add user</Modal.Title>
 				</Modal.Header>
@@ -134,7 +143,7 @@ function App() {
 				</Modal.Body>
 			</Modal>
 
-			<Modal show={show2} onHide={handleClose2}>
+			<Modal show={show2} onHide={closeModalConfirm}>
 				<Modal.Header closeButton>
 					<Modal.Title >Deleted users</Modal.Title>
 				</Modal.Header>
@@ -143,7 +152,7 @@ function App() {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant='success' type="button" onClick={removeUsers}>Delete</Button>
-					<Button variant='secondary' type="button" onClick={handleClose2}>Cancel</Button>
+					<Button variant='secondary' type="button" onClick={closeModalConfirm}>Cancel</Button>
 				</Modal.Footer>
 			</Modal>
 		</div >
