@@ -9,7 +9,8 @@ import ButtonTable from './components/ButtonTable';
 import FormAdd from './components/FormAdd';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Select from './components/Select/Select';
+import Select from './components/UI/Select/Select';
+import Loader from './components/UI/Loader/Loader';
 // import { Button, Modal } from 'react-bootstrap';
 
 
@@ -18,7 +19,7 @@ function App() {
 	console.log('render App');
 
 	const [usersStore] = useStore('users');
-	let { users, sorted, add, remove, changeChecked, changeCheckedAll, getCountChecked, search } = usersStore;
+	let { users, loading, sorted, add, remove, changeChecked, changeCheckedAll, getCountChecked, search } = usersStore;
 
 
 	const [show, setShow] = useState(false)
@@ -130,8 +131,11 @@ function App() {
 						<Row key={item.id} {...item} handleCheck={handleCheck} />
 					))}
 
+
 				</tbody>
 			</table>
+			{loading && <Loader style={{margin: '30px auto'}} />}
+			{list.length === 0 && !loading && <h2>Users not found</h2> }
 
 
 			<Modal show={show} onHide={closeModalAdd}>

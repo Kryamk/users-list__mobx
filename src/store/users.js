@@ -4,6 +4,7 @@ export default class Users {
 	usersInitial = [];
 	users = [];
 	usersNum = 0;
+	loading = false;
 	// chekedUsers = [];
 
 	// item(id) {
@@ -12,11 +13,13 @@ export default class Users {
 	// }
 
 	async load() {
+		this.loading = true;
 		let usersInitial = await this.api.load();
 		runInAction(() => {
 			this.usersInitial = usersInitial;
 			this.createUsersList(usersInitial);
 			this.usersNum = usersInitial.length;
+			this.loading = false
 		})
 	}
 
