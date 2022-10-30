@@ -1,6 +1,5 @@
 let path = require('path');
 let MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
 let conf = {
 	context: __dirname,
 	entry: './src/main.js',
