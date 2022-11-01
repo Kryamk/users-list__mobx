@@ -26,10 +26,10 @@ export default function FormAdd({ add }) {
 	];
 	const formik = useFormik({
 		initialValues: {
-			name: 'Иван',
-			username: 'kryamk',
-			email: 'test@test.ru',
-			phone: '9211279264',
+			name: '',
+			username: '',
+			email: '',
+			phone: '',
 			zipcode: '',
 			checked: false
 		},

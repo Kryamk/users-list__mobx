@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Row from './components/Row';
-// import About from './pages/About';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import useStore from './hooks/useStore';
@@ -11,7 +10,6 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Select from './components/UI/Select/Select';
 import Loader from './components/UI/Loader/Loader';
-// import { Button, Modal } from 'react-bootstrap';
 
 
 export default observer(App);
@@ -31,16 +29,13 @@ function App() {
 	useEffect(() => {
 		let filterUsers = search(filter)
 		setList(filterUsers)
-		console.log('filterUsers---', filterUsers);
-		console.log('users---', users);
 	}, [users, filter.field, filter.query])
 
-
 	const addUser = (user) => {
-		console.log('---', 'addUser');
 		add(user)
 		closeModalAdd()
 	}
+
 	const removeUsers = () => {
 		remove()
 		setcheckInputAll(false)
@@ -67,55 +62,25 @@ function App() {
 			e.target.dataset.reverse = 'true'
 		}
 		sorted(field, reverse)
-		// setList(sortedList) // нужно не setList, а функцию где будет фильтровать и закивывать в setList
-		// filterList()
 	}
 
 	const handleCheck = (e) => {
 		changeChecked(+e.target.value, e.target.checked)
 		setCountChecked(getCountChecked())
 	}
+
 	const checkedUsersAll = (e) => {
 		changeCheckedAll(list, e.target.checked)
 		setcheckInputAll(e.target.checked)
 		setCountChecked(getCountChecked())
 	}
 
-
-
-
-
-
-
-
-
-
-
-
 	const enterQuery = (e) => {
 		setFilter({ ...filter, query: e.target.value })
-		// console.log('---',e.target.value);
-		// let filterUsers = search({ ...filter, query: e.target.value })
-		// setList(filterUsers)
 	}
-
-
-
-
-
-	// useEffect(() => {
-	// 	// console.log('---',list);
-	// 	// let obj = list[0]
-	// 	// if (obj) console.log('---list', obj.checked);
-	// }, [users])
 
 	return (
 		<div className="wrapper">
-			{/* <Button type='button' onClick={add2}>Add new user on server</Button>
-			<Button type='button' onClick={load2}>Add new user on server</Button> */}
-
-
-
 
 			<header className="header">
 				<div className="filter">
@@ -125,8 +90,6 @@ function App() {
 				<Button variant="danger" disabled={countChecked === 0 ? true : false} type="button" onClick={showModalConfirm}>Delete</Button>
 				<Button variant="primary" onClick={showModalAdd}>+ Add user</Button>
 			</header>
-
-
 
 			<table className='users-list'>
 				<tbody>
@@ -140,8 +103,6 @@ function App() {
 						<th>Phone</th>
 						<th><ButtonTable sortField='zipcode' reverse='false' sorting={(e) => sort(e)}>zipcode</ButtonTable></th>
 					</tr>
-
-
 
 					{list.map((item, i = 0) => (
 						<Row key={item.id} {...item} handleCheck={handleCheck} />

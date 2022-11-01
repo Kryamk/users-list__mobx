@@ -4,10 +4,6 @@ import { observer } from 'mobx-react-lite';
 
 export default observer(Row);
 function Row({ handleCheck, id, name, username, email, phone, zipcode, checked }) {
-	// console.log('render Row');
-
-
-
 
 	return (
 		<tr key={id} style={checked ? {background: 'lightskyblue'} : {}}>

@@ -5,12 +5,6 @@ export default class Users {
 	users = [];
 	usersNum = 0;
 	loading = false;
-	// chekedUsers = [];
-
-	// item(id) {
-	// 	// console.log('item');
-	// 	return this.users.find(pr => pr.id == id);
-	// }
 
 	async load() {
 		this.loading = true;
@@ -22,28 +16,6 @@ export default class Users {
 			this.loading = false
 		})
 	}
-
-	/* 	async add2() {
-			await fetch('https://jsonplaceholder.typicode.com/users', {
-				method: 'POST',
-				body: JSON.stringify({
-					name: 'foo',
-					username: 'bar',
-					id: 100,
-				}),
-				headers: {
-					'Content-type': 'application/json; charset=UTF-8',
-				},
-			})
-				.then((response) => response.json())
-				.then((json) => console.log(json));
-		}
-
-		async load2() {
-			fetch('https://jsonplaceholder.typicode.com/users')
-				.then((response) => response.json())
-				.then((json) => console.log(json));
-		} */
 
 	createUsersList = (list) => {
 		let users = [];
@@ -61,15 +33,12 @@ export default class Users {
 		this.users = users;
 	}
 
-
 	add = (user) => {
 		user = { id: this.usersNum + 1, ...user }
 		// this.users.push(user); // если просто пушить, то не добавляется юзер, useEffect не срабатывает
 		this.users = [...this.users, user]
 		++this.usersNum;
 	}
-
-
 
 	remove = () => {
 		// this.users = this.users.filter(user => !usersId.includes(user.id))
@@ -103,18 +72,14 @@ export default class Users {
 	}
 
 	sorted = (field, reverse) => {
-		// let newListUsers = [...users]
-
 		if (field === 'id') {
 			// this.users.sort((a, b) => a[field] - b[field])
-
 			let newArr = [...this.users]
 			newArr.sort((a, b) => a[field] - b[field])
 			this.users = newArr;
 		}
 		else {
 			// this.users.sort((a, b) => a[field].localeCompare(b[field]))
-
 			let newArr = [...this.users]
 			newArr.sort((a, b) => a[field].localeCompare(b[field]))
 			this.users = newArr;
@@ -122,17 +87,13 @@ export default class Users {
 
 		if (reverse === 'true') {
 			// this.users.reverse();
-
 			let newArr = [...this.users]
 			newArr.reverse();
 			this.users = newArr;
 		}
-
-		// return newListUsers;
 	}
 
 	search = (filter) => {
-		// console.log('-------', filter);
 		let query = filter.query;
 		let field = filter.field;
 		let filterUsers
