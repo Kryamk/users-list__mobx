@@ -52,7 +52,13 @@ export default class Users {
 	}
 
 	changeChecked = (id, checked) => {
-		this.users = this.users.map(user => user.id === id ? { ...user, checked } : user)
+		// this.users = this.users.map(user => user.id === id ? { ...user, checked } : user)
+		this.users.forEach(user => {
+			if (user.id === id ) {
+				user.checked = checked
+				console.log(this.users);
+			}
+		})
 	}
 
 	changeCheckedAll = (checked) => {
@@ -105,7 +111,7 @@ export default class Users {
 	}
 
 	search = (filter) => {
-		console.log('---', filter);
+		// console.log('---', filter);
 		let query = filter.query;
 		let field = filter.field;
 		let filterUsers

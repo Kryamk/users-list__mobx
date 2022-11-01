@@ -50,6 +50,7 @@ function App() {
 	const [checkInputAll, setcheckInputAll] = useState(false)
 	const handleCheck = (e) => {
 		changeChecked(+e.target.value, e.target.checked)
+		setCountChecked(getCountChecked())
 	}
 	const checkedUsersAll = (e) => {
 		changeCheckedAll(e.target.checked)
