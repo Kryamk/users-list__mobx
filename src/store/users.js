@@ -23,6 +23,28 @@ export default class Users {
 		})
 	}
 
+	/* 	async add2() {
+			await fetch('https://jsonplaceholder.typicode.com/users', {
+				method: 'POST',
+				body: JSON.stringify({
+					name: 'foo',
+					username: 'bar',
+					id: 100,
+				}),
+				headers: {
+					'Content-type': 'application/json; charset=UTF-8',
+				},
+			})
+				.then((response) => response.json())
+				.then((json) => console.log(json));
+		}
+
+		async load2() {
+			fetch('https://jsonplaceholder.typicode.com/users')
+				.then((response) => response.json())
+				.then((json) => console.log(json));
+		} */
+
 	createUsersList = (list) => {
 		let users = [];
 		list.forEach(user => {
@@ -42,9 +64,12 @@ export default class Users {
 
 	add = (user) => {
 		user = { id: this.usersNum + 1, ...user }
-		this.users.push(user);
+		// this.users.push(user); // если просто пушить, то не добавляется юзер, useEffect не срабатывает
+		this.users = [...this.users, user]
 		++this.usersNum;
 	}
+
+
 
 	remove = () => {
 		// this.users = this.users.filter(user => !usersId.includes(user.id))
@@ -54,16 +79,20 @@ export default class Users {
 	changeChecked = (id, checked) => {
 		// this.users = this.users.map(user => user.id === id ? { ...user, checked } : user)
 		this.users.forEach(user => {
-			if (user.id === id ) {
+			if (user.id === id) {
 				user.checked = checked
 				console.log(this.users);
 			}
 		})
 	}
 
-	changeCheckedAll = (checked) => {
-		this.users.forEach(user => {
-			user.checked = checked
+	changeCheckedAll = (list, checked) => {
+		list.forEach(item => {
+			this.users.forEach(user => {
+				if (user.id === item.id) {
+					user.checked = checked
+				}
+			})
 		})
 	}
 
@@ -73,25 +102,15 @@ export default class Users {
 		return count;
 	}
 
-	/* getChecked = ()=>{
-		let checkedUsers = [];
-		this.users.forEach(user=>{
-			if (user.checked === true) {
-				checkedUsers.push(user)
-			}
-		})
-		return checkedUsers;
-	} */
-
 	sorted = (field, reverse) => {
-		// После фильтрации не работает сортировка, исправлено присваиванием нового массива в this.users
+		// let newListUsers = [...users]
+
 		if (field === 'id') {
 			// this.users.sort((a, b) => a[field] - b[field])
 
 			let newArr = [...this.users]
 			newArr.sort((a, b) => a[field] - b[field])
 			this.users = newArr;
-
 		}
 		else {
 			// this.users.sort((a, b) => a[field].localeCompare(b[field]))
@@ -108,10 +127,12 @@ export default class Users {
 			newArr.reverse();
 			this.users = newArr;
 		}
+
+		// return newListUsers;
 	}
 
 	search = (filter) => {
-		// console.log('---', filter);
+		// console.log('-------', filter);
 		let query = filter.query;
 		let field = filter.field;
 		let filterUsers

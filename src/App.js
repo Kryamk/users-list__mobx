@@ -18,19 +18,41 @@ export default observer(App);
 function App() {
 	console.log('render App');
 
-	const [usersStore] = useStore('users');
-	let { users, loading, sorted, add, remove, changeChecked, changeCheckedAll, getCountChecked, search } = usersStore;
-
-
+	const [list, setList] = useState([])
+	const [filter, setFilter] = useState({ field: 'all', query: '' })
 	const [show, setShow] = useState(false)
+	const [show2, setShow2] = useState(false)
+	const [countChecked, setCountChecked] = useState(0)
+	const [checkInputAll, setcheckInputAll] = useState(false)
+	const [usersStore] = useStore('users');
+	const { users, loading, sorted, add, remove, changeChecked, changeCheckedAll, getCountChecked, search } = usersStore;
+
+
+	useEffect(() => {
+		let filterUsers = search(filter)
+		setList(filterUsers)
+		console.log('filterUsers---', filterUsers);
+		console.log('users---', users);
+	}, [users, filter.field, filter.query])
+
+
+	const addUser = (user) => {
+		console.log('---', 'addUser');
+		add(user)
+		closeModalAdd()
+	}
+	const removeUsers = () => {
+		remove()
+		setcheckInputAll(false)
+		closeModalConfirm()
+	};
+
 	const showModalAdd = () => { setShow(true) }
 	const closeModalAdd = () => { setShow(false) }
 
-	const [show2, setShow2] = useState(false)
 	const showModalConfirm = () => { setShow2(true) }
 	const closeModalConfirm = () => { setShow2(false) }
 
-	const [countChecked, setCountChecked] = useState(0)
 	useEffect(() => {
 		setCountChecked(getCountChecked())
 	}, [users])
@@ -45,45 +67,36 @@ function App() {
 			e.target.dataset.reverse = 'true'
 		}
 		sorted(field, reverse)
+		// setList(sortedList) // нужно не setList, а функцию где будет фильтровать и закивывать в setList
+		// filterList()
 	}
 
-	const [checkInputAll, setcheckInputAll] = useState(false)
 	const handleCheck = (e) => {
 		changeChecked(+e.target.value, e.target.checked)
 		setCountChecked(getCountChecked())
 	}
 	const checkedUsersAll = (e) => {
-		changeCheckedAll(e.target.checked)
+		changeCheckedAll(list, e.target.checked)
 		setcheckInputAll(e.target.checked)
 		setCountChecked(getCountChecked())
 	}
 
 
-	const addUser = (user) => {
-		add(user)
-		closeModalAdd()
-	}
-	const removeUsers = () => {
-		remove()
-		setcheckInputAll(false)
-		closeModalConfirm()
-	};
-
-
-	const [list, setList] = useState([])
-
-	useEffect(() => {
-		setList(users)
-	}, [users])
 
 
 
-	const [filter, setFilter] = useState({ field: 'all' })
+
+
+
+
+
+
+
 	const enterQuery = (e) => {
-		// setFilter({...filter, query: e.target.value})
+		setFilter({ ...filter, query: e.target.value })
 		// console.log('---',e.target.value);
-		let filterUsers = search({ ...filter, query: e.target.value })
-		setList(filterUsers)
+		// let filterUsers = search({ ...filter, query: e.target.value })
+		// setList(filterUsers)
 	}
 
 
@@ -98,6 +111,8 @@ function App() {
 
 	return (
 		<div className="wrapper">
+			{/* <Button type='button' onClick={add2}>Add new user on server</Button>
+			<Button type='button' onClick={load2}>Add new user on server</Button> */}
 
 
 
@@ -105,7 +120,7 @@ function App() {
 			<header className="header">
 				<div className="filter">
 					<Select onChange={selectedSort => setFilter({ ...filter, field: selectedSort })} />
-					<input type="text" onChange={enterQuery} placeholder='Search' />
+					<input type="text" value={filter.query} onChange={enterQuery} placeholder='Search' />
 				</div>
 				<Button variant="danger" disabled={countChecked === 0 ? true : false} type="button" onClick={showModalConfirm}>Delete</Button>
 				<Button variant="primary" onClick={showModalAdd}>+ Add user</Button>
@@ -135,8 +150,8 @@ function App() {
 
 				</tbody>
 			</table>
-			{loading && <Loader style={{margin: '30px auto'}} />}
-			{list.length === 0 && !loading && <h2>Users not found</h2> }
+			{loading && <Loader style={{ margin: '30px auto' }} />}
+			{list.length === 0 && !loading && <h2>Users not found</h2>}
 
 
 			<Modal show={show} onHide={closeModalAdd}>
