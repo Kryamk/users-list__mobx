@@ -1,5 +1,5 @@
 {
-  "name": "users-list__m",
+  "name": "users-list__mobx",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
