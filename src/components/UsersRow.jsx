@@ -1,12 +1,11 @@
 import React from 'react'
-import { observer } from 'mobx-react-lite';
+// import { observer } from 'mobx-react-lite';
 
 
-export default observer(Row);
-function Row({ handleCheck, id, name, username, email, phone, zipcode, checked }) {
 
+const UsersRow = ({ handleCheck, id, name, username, email, phone, zipcode, checked }) => {
 	return (
-		<tr key={id} style={checked ? {background: 'lightskyblue'} : {}}>
+		<tr key={id} style={checked ? { background: 'lightskyblue' } : {}}>
 			<td><input className='checked-input' type="checkbox" checked={checked} value={id} onChange={handleCheck}></input></td>
 			<td>{id}</td>
 			<td><span className='users-list__avatar'>{name[0]}</span></td>
@@ -18,3 +17,5 @@ function Row({ handleCheck, id, name, username, email, phone, zipcode, checked }
 		</tr>
 	)
 }
+export default UsersRow;
+// export default observer(UsersRow);

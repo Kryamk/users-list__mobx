@@ -35,9 +35,9 @@ export default function FormAdd({ add }) {
 		},
 		validationSchema: Yup.object({
 			name: Yup.string().max(20, 'more 20').required('Name is required'),
-			username: Yup.string().matches(/^[a-zA-z0-9]+$/, 'Only latin letters and numbers').min(4, 'more 4').required('Username is required'),
-			email: Yup.string().email('Enter correctly email').required('Email is required'),
-			phone: Yup.string().required('Phone is required'),
+			username: Yup.string().matches(/^[a-zA-z0-9]+$/, 'Only latin letters and numbers').min(4, 'more 4'),
+			email: Yup.string().email('Enter correctly email'),
+			phone: Yup.string(),
 			zipcode: Yup.string().matches(/^[0-9-]*$/, 'Only numbers or dash')
 		}),
 		onSubmit: values => {
